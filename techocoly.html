@@ -1,391 +1,269 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>潛力與技能表</title>
-
-<style>
-    body {
-        font-family: "Microsoft JhengHei", sans-serif;
-        background: #f2f2f7;
-        margin: 0;
-        padding: 20px;
-    }
-
-    .container {
-        max-width: 420px;
-        margin: auto;
-    }
-
-    h2 {
-        text-align: center;
-        margin-bottom: 15px;
-        font-weight: bold;
-    }
-
-    .card {
-        background: white;
-        padding: 20px;
-        border-radius: 14px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        margin-bottom: 15px;
-    }
-
-    label {
-        font-size: 15px;
-        font-weight: bold;
-    }
-     .tabs {
-        display: flex;
-        background: #333;
-    }
-    .tab {
-        padding: 15px 20px;
-        color: #fff;
-        cursor: pointer;
-        flex: 1;
-        text-align: center;
-    }
-    .tab.active {
-        background: #4fa3ff;
-    }
-
-    .content {
-        display: none;
-        padding: 20px;
-    }
-    .content.active {
-        display: block;
-    }
-
-    .card {
-        background: white;
-        padding: 20px;
-        border-radius: 6px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        max-width: 450px;
-        margin: auto;
-    }
-
-    select {
-        width: 100%;
-        padding: 10px;
-        margin-top: 6px;
-        margin-bottom: 15px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        font-size: 15px;
-    }
-
-    button {
-        width: 100%;
-        padding: 12px;
-        background: #4fa3ff;
-        border: none;
-        color: white;
-        font-size: 16px;
-        border-radius: 10px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    button:hover {
-        background: #2f8af3;
-    }
-
-    .result-box {
-        margin-top: 20px;
-        background: white;
-        padding: 18px;
-        border-radius: 14px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        font-size: 15px;
-        line-height: 1.8;
-    }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
-        font-size: 14px;
-        background: #fff;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 3px 8px rgba(0,0,0,0.05);
-    }
-
-    th, td {
-        padding: 10px;
-        text-align: center;
-    }
-
-    th {
-        background: #f0f4ff;
-        font-weight: 600;
-        color: #333;
-    }
-
-    td {
-        color: #555;
-        border-bottom: 1px solid #eee;
-    }
-
-    tr:last-child td {
-        border-bottom: none;
-    }
-    .sub-tabs {
-    display: flex;
-    margin-bottom: 10px;
-    border-bottom: 2px solid #ccc;
-    }
-    .sub-tab {
-        flex: 1;
-        padding: 10px;
-        text-align: center;
-        cursor: pointer;
-        background: #eee;
-        font-weight: bold;
-    }
-    .sub-tab.active {
-        background: #4fa3ff;
-        color: #fff;
-    }
-    .sub-content {
-        display: none;
-    }
-    .sub-content.active {
-        display: block;
-    }
-    .sub-sub-tabs {
-    display: flex;
-    margin-top: 10px;
-    }
-    .sub-sub-tab {
-        padding: 5px 10px;
-        cursor: pointer;
-        border: 1px solid #ccc;
-        margin-right: 5px;
-    }
-    .sub-sub-tab.active {
-        background-color: #007bff;
-        color: #fff;
-    }
-    .sub-sub-content {
-        display: none;
-        margin-top: 10px;
-    }
-    .sub-sub-content.active {
-        display: block;
-    }
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>潛力與技能表</title>
 </head>
+
 <body>
-<div class="tabs">
-    <div class="tab active" onclick="showTab(0)">潛力計算機</div>
-    <div class="tab" onclick="showTab(1)">技能表</div>
-</div>
-<div class="container">
-    <div class="content active">
-        <h2>潛力計算器</h2>
-        <div class="card">
-            <label>目前技能等級：</label>
-            <select id="currentLevel">
-                <option value="">請選擇</option>
-            </select>
-            <label>最高技能等級：</label>
-            <select id="maxLevel">
-                <option value="">請選擇</option>
-            </select>
-            <button onclick="calcCost()">開始計算</button>
-        </div>
-        <div class="result-box" id="result">
-            尚未計算
-        </div>
+    <div class="tabs">
+        <div class="tab active" onclick="showTab(0)">潛力計算機</div>
+        <div class="tab" onclick="showTab(1)">技能表</div>
     </div>
-
-    <div class="content" style="width: auto;">
-        <h2 style="text-align:center;">技能大集合</h2>
-        <div class="sub-tabs">
-            <div class="sub-tab active" onclick="showSubTab(0)">打者</div>
-            <div class="sub-tab" onclick="showSubTab(1)">投手</div>
-            <div class="sub-tab" onclick="showSubTab(2)">牛棚</div>
-            <div class="sub-tab" onclick="showSubTab(3)">HOF</div>
-        </div>
-        <div class="sub-content active">
-            <div class="sub-sub-tabs">
-                <div class="sub-sub-tab active" onclick="showSubSubTab(0, 'hitter')">SS</div>
-                <div class="sub-sub-tab" onclick="showSubSubTab(1, 'hitter')">S</div>
-                <div class="sub-sub-tab" onclick="showSubSubTab(2, 'hitter')">A</div>
+    <div class="container">
+        <div class="content active">
+            <h2>潛力計算器</h2>
+            <div class="card">
+                <label>目前技能等級：</label>
+                <select id="currentLevel">
+                    <option value="">請選擇</option>
+                </select>
+                <label>最高技能等級：</label>
+                <select id="maxLevel">
+                    <option value="">請選擇</option>
+                </select>
+                <button onclick="calcCost()">開始計算</button>
             </div>
-            <div class="sub-sub-content active" id="hitter-SS">
-                 <table>
-                    <thead>
-                        <tr><th>序號</th><th>技能</th><th>評分</th><th>等級</th></tr>
-                    </thead>
-                    <tbody id="hitter">
-                    </tbody>
-                </table>
-            </div>
-            <div class="sub-sub-content" id="hitter-S">
-                <table>
-                    <tr><th>序號</th><th>技能</th><th>評分</th></tr>
-                    <tr><td>1</td><td>打擊穩定</td><td>25</td></tr>
-                </table>
-            </div>
-            <div class="sub-sub-content" id="hitter-A">
-                <table>
-                    <tr><th>序號</th><th>技能</th><th>評分</th></tr>
-                    <tr><td>1</td><td>速度型選手</td><td>20</td></tr>
-                </table>
+            <div class="result-box" id="result">
+                尚未計算
             </div>
         </div>
-         <div class="sub-content">
-            <div class="sub-sub-tabs">
-                <div class="sub-sub-tab active" onclick="showSubSubTab(0, 'hitter')">SS</div>
-                <div class="sub-sub-tab" onclick="showSubSubTab(1, 'hitter')">S</div>
-                <div class="sub-sub-tab" onclick="showSubSubTab(2, 'hitter')">A</div>
+
+        <div class="content" style="width: auto;">
+            <h2 style="text-align:center;">技能大集合</h2>
+            <div class="sub-tabs">
+                <div class="sub-tab active" onclick="showSubTab(0)">打者</div>
+                <div class="sub-tab" onclick="showSubTab(1)">投手</div>
+                <div class="sub-tab" onclick="showSubTab(2)">牛棚</div>
+                <div class="sub-tab" onclick="showSubTab(3)">HOF</div>
             </div>
-            <div class="sub-sub-content active" id="hitter-SS">
-                <table>
-                    <tr><th>序號</th><th>技能</th><th>評分</th></tr>
-                    <tr><td>1</td><td>核心主導者</td><td>33</td></tr>
-                    <tr><td>2</td><td>領導者</td><td>27</td></tr>
-                </table>
+            <div class="sub-content active">
+                <div class="sub-sub-tabs">
+                    <div class="sub-sub-tab active" onclick="showSubSubTab(0, 'hitter')">SS</div>
+                    <div class="sub-sub-tab" onclick="showSubSubTab(1, 'hitter')">S</div>
+                    <div class="sub-sub-tab" onclick="showSubSubTab(2, 'hitter')">A</div>
+                </div>
+                <div class="sub-sub-content active" id="hitter-SS">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>序號</th>
+                                <th>技能</th>
+                                <th>評分</th>
+                                <th>等級</th>
+                            </tr>
+                        </thead>
+                        <tbody id="hitter">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="sub-sub-content" id="hitter-S">
+                    <table>
+                        <tr>
+                            <th>序號</th>
+                            <th>技能</th>
+                            <th>評分</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>打擊穩定</td>
+                            <td>25</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="sub-sub-content" id="hitter-A">
+                    <table>
+                        <tr>
+                            <th>序號</th>
+                            <th>技能</th>
+                            <th>評分</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>速度型選手</td>
+                            <td>20</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-            <div class="sub-sub-content" id="hitter-S">
-                <table>
-                    <tr><th>序號</th><th>技能</th><th>評分</th></tr>
-                    <tr><td>1</td><td>打擊穩定</td><td>25</td></tr>
-                </table>
-            </div>
-            <div class="sub-sub-content" id="hitter-A">
-                <table>
-                    <tr><th>序號</th><th>技能</th><th>評分</th></tr>
-                    <tr><td>1</td><td>速度型選手</td><td>20</td></tr>
-                </table>
+            <div class="sub-content">
+                <div class="sub-sub-tabs">
+                    <div class="sub-sub-tab active" onclick="showSubSubTab(0, 'hitter')">SS</div>
+                    <div class="sub-sub-tab" onclick="showSubSubTab(1, 'hitter')">S</div>
+                    <div class="sub-sub-tab" onclick="showSubSubTab(2, 'hitter')">A</div>
+                </div>
+                <div class="sub-sub-content active" id="hitter-SS">
+                    <table>
+                        <tr>
+                            <th>序號</th>
+                            <th>技能</th>
+                            <th>評分</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>核心主導者</td>
+                            <td>33</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>領導者</td>
+                            <td>27</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="sub-sub-content" id="hitter-S">
+                    <table>
+                        <tr>
+                            <th>序號</th>
+                            <th>技能</th>
+                            <th>評分</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>打擊穩定</td>
+                            <td>25</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="sub-sub-content" id="hitter-A">
+                    <table>
+                        <tr>
+                            <th>序號</th>
+                            <th>技能</th>
+                            <th>評分</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>速度型選手</td>
+                            <td>20</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-<script>
-function showTab(index) {
-    document.querySelectorAll(".tab").forEach((t,i)=>{
-        t.classList.toggle("active", i===index);
-    });
-    document.querySelectorAll(".content").forEach((c,i)=>{
-        c.classList.toggle("active", i===index);
-    });
-}
-function showSubTab(index) {
-    document.querySelectorAll(".sub-tab").forEach((t,i)=>{
-        t.classList.toggle("active", i===index);
-    });
-    document.querySelectorAll(".sub-content").forEach((c,i)=>{
-        c.classList.toggle("active", i===index);
-    });
-}
-function showSubSubTab(index, type) {
-    const contents = document.querySelectorAll(`#${type}-SS, #${type}-S, #${type}-A`);
-    const tabs = document.querySelectorAll(`.sub-sub-tabs div`);
+        <script>
+            function showTab(index) {
+                document.querySelectorAll(".tab").forEach((t, i) => {
+                    t.classList.toggle("active", i === index);
+                });
+                document.querySelectorAll(".content").forEach((c, i) => {
+                    c.classList.toggle("active", i === index);
+                });
+            }
+            function showSubTab(index) {
+                document.querySelectorAll(".sub-tab").forEach((t, i) => {
+                    t.classList.toggle("active", i === index);
+                });
+                document.querySelectorAll(".sub-content").forEach((c, i) => {
+                    c.classList.toggle("active", i === index);
+                });
+            }
+            function showSubSubTab(index, type) {
+                const contents = document.querySelectorAll(`#${type}-SS, #${type}-S, #${type}-A`);
+                const tabs = document.querySelectorAll(`.sub-sub-tabs div`);
 
-    contents.forEach(c => c.classList.remove('active'));
-    tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+                tabs.forEach(t => t.classList.remove('active'));
 
-    contents[index].classList.add('active');
-    tabs[index].classList.add('active');
-}
-const hitter = [
-    { name: "核心主導者", score: 33, grade: "SS" },
-    { name: "領導者", score: 27, grade: "SS" },
-    { name: "中央打線", score: 24, grade: "SS" },
-    { name: "客場戰神", score: 22.8, grade: "SS" },
-    { name: "疊加", score: 24, grade: "SS" },
-    { name: "超速節奏", score: 23.2, grade: "SS" },
-    { name: "旋風主角", score: 22, grade: "S" },
-    { name: "打擊機器", score: 21, grade: "S" },
-    { name: "主場英雄", score: 20.9, grade: "S" },
-    { name: "挑戰精神", score: 20, grade: "S" },
-    { name: "挑戰者", score: 20, grade: "S" },
-    { name: "排名競爭", score: 19, grade: "A" },
-    { name: "五項全能", score: 15, grade: "A" },
-    { name: "強力打者", score: 18.7, grade: "A" },
-    { name: "下位打線", score: 18.5, grade: "A" },
-    { name: "經驗豐富", score: 18.4, grade: "A" },
-    { name: "主場優勢", score: 18.4, grade: "A" },
-    { name: "接觸型打者", score: 16.5, grade: "A" },
-    { name: "最佳球員", score: 16, grade: "A" },
-];
-const tbody = document.getElementById("hitter");
-hitter.forEach((hitter, index) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
+                contents[index].classList.add('active');
+                tabs[index].classList.add('active');
+            }
+            const hitter = [
+                { name: "核心主導者", score: 33, grade: "SS" },
+                { name: "領導者", score: 27, grade: "SS" },
+                { name: "中央打線", score: 24, grade: "SS" },
+                { name: "客場戰神", score: 22.8, grade: "SS" },
+                { name: "疊加", score: 24, grade: "SS" },
+                { name: "超速節奏", score: 23.2, grade: "SS" },
+                { name: "旋風主角", score: 22, grade: "S" },
+                { name: "打擊機器", score: 21, grade: "S" },
+                { name: "主場英雄", score: 20.9, grade: "S" },
+                { name: "挑戰精神", score: 20, grade: "S" },
+                { name: "挑戰者", score: 20, grade: "S" },
+                { name: "排名競爭", score: 19, grade: "A" },
+                { name: "五項全能", score: 15, grade: "A" },
+                { name: "強力打者", score: 18.7, grade: "A" },
+                { name: "下位打線", score: 18.5, grade: "A" },
+                { name: "經驗豐富", score: 18.4, grade: "A" },
+                { name: "主場優勢", score: 18.4, grade: "A" },
+                { name: "接觸型打者", score: 16.5, grade: "A" },
+                { name: "最佳球員", score: 16, grade: "A" },
+            ];
+            const tbody = document.getElementById("hitter");
+            hitter.forEach((hitter, index) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
         <td>${index + 1}</td>
         <td>${hitter.name}</td>
         <td>${hitter.score}</td>
         <td>${hitter.grade}</td>
     `;
-    tbody.appendChild(tr);
-});
-const levels = ["D", "D+", "C", "C+", "B", "B+", "A", "A+", "S", "S+"];
+                tbody.appendChild(tr);
+            });
+            const levels = ["D", "D+", "C", "C+", "B", "B+", "A", "A+", "S", "S+"];
 
-const levelCost = {
-    "D":  {"初階": 200,  "中階": 0,   "高階": 0},
-    "D+": {"初階": 300,  "中階": 450, "高階": 0},
-    "C":  {"初階": 400,  "中階": 550, "高階": 0},
-    "C+": {"初階": 500,  "中階": 650, "高階": 0},
-    "B":  {"初階": 0,    "中階": 750, "高階": 900},
-    "B+": {"初階": 0,    "中階": 850, "高階": 1000},
-    "A":  {"初階": 0,    "中階": 950, "高階": 1100},
-    "A+": {"初階": 0,    "中階": 1050,"高階": 1200},
-    "S":  {"初階": 0,    "中階": 1150,"高階": 1300},
-    "S+": {"初階": 0,    "中階": 1250,"高階": 1400},
-};
+            const levelCost = {
+                "D": { "初階": 200, "中階": 0, "高階": 0 },
+                "D+": { "初階": 300, "中階": 450, "高階": 0 },
+                "C": { "初階": 400, "中階": 550, "高階": 0 },
+                "C+": { "初階": 500, "中階": 650, "高階": 0 },
+                "B": { "初階": 0, "中階": 750, "高階": 900 },
+                "B+": { "初階": 0, "中階": 850, "高階": 1000 },
+                "A": { "初階": 0, "中階": 950, "高階": 1100 },
+                "A+": { "初階": 0, "中階": 1050, "高階": 1200 },
+                "S": { "初階": 0, "中階": 1150, "高階": 1300 },
+                "S+": { "初階": 0, "中階": 1250, "高階": 1400 },
+            };
 
-function initSelect() {
-    const current = document.getElementById("currentLevel");
-    const max = document.getElementById("maxLevel");
+            function initSelect() {
+                const current = document.getElementById("currentLevel");
+                const max = document.getElementById("maxLevel");
 
-    levels.forEach(lv => {
-        current.innerHTML += `<option value="${lv}">${lv}</option>`;
-        max.innerHTML += `<option value="${lv}">${lv}</option>`;
-    });
-}
-initSelect();
+                levels.forEach(lv => {
+                    current.innerHTML += `<option value="${lv}">${lv}</option>`;
+                    max.innerHTML += `<option value="${lv}">${lv}</option>`;
+                });
+            }
+            initSelect();
 
-function calcCost() {
-    const c = document.getElementById("currentLevel").value;
-    const m = document.getElementById("maxLevel").value;
-    const result = document.getElementById("result");
+            function calcCost() {
+                const c = document.getElementById("currentLevel").value;
+                const m = document.getElementById("maxLevel").value;
+                const result = document.getElementById("result");
 
-    if (!c || !m) {
-        result.innerHTML = "請選擇兩個等級";
-        return;
-    }
+                if (!c || !m) {
+                    result.innerHTML = "請選擇兩個等級";
+                    return;
+                }
 
-    const idxC = levels.indexOf(c);
-    const idxM = levels.indexOf(m);
+                const idxC = levels.indexOf(c);
+                const idxM = levels.indexOf(m);
 
-    if (idxM <= idxC) {
-        result.innerHTML = "最高等級必須大於目前等級";
-        return;
-    }
+                if (idxM <= idxC) {
+                    result.innerHTML = "最高等級必須大於目前等級";
+                    return;
+                }
 
-    let low = 0, mid = 0, high = 0;
+                let low = 0, mid = 0, high = 0;
 
-    for (let i = idxC + 1; i <= idxM; i++) {
-        const lv = levels[i];
-        low += levelCost[lv]["初階"];
-        mid += levelCost[lv]["中階"];
-        high += levelCost[lv]["高階"];
-    }
+                for (let i = idxC + 1; i <= idxM; i++) {
+                    const lv = levels[i];
+                    low += levelCost[lv]["初階"];
+                    mid += levelCost[lv]["中階"];
+                    high += levelCost[lv]["高階"];
+                }
 
-    result.innerHTML = `
+                result.innerHTML = `
         初階素材需要：<b>${low}</b><br>
         中階素材需要：<b>${mid}</b><br>
         高階素材需要：<b>${high}</b>
     `;
-}
-</script>
+            }
+        </script>
 
 </body>
+
 </html>
