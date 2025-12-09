@@ -37,9 +37,9 @@ function showSubSubTab(index, type) {
 -------------------------------------------------------- */
 
 getSkillCsvFile('skill_hitter').then(hitterList => {
-    const tbodySS = document.querySelector("#hitter-SS tbody") || document.getElementById("hitter");
-    const tbodyS  = document.querySelector("#hitter-S tbody");
-    const tbodyA  = document.querySelector("#hitter-A tbody");
+    const tbodySS = document.querySelector("#hitter-SS tbody") || document.getElementById("hitter_ss");
+    const tbodyS  = document.querySelector("#hitter-S tbody")|| document.getElementById("hitter_s");
+    const tbodyA  = document.querySelector("#hitter-A tbody")|| document.getElementById("hitter_a");
 
     hitterList.forEach((hitter, index) => {
         const tr = document.createElement("tr");
