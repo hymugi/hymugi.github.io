@@ -16,81 +16,70 @@ function showSubTab(index) {
     });
 }
 
-/* ----------------- 修正後的 第三層分頁 ------------------ */
 function showSubSubTab(index) {
     const current = document.querySelector(".sub-content.active");
-
     const tabs = current.querySelectorAll(".sub-sub-tab");
     const contents = current.querySelectorAll(".sub-sub-content");
 
-    tabs.forEach((t, i) => {
-        t.classList.toggle("active", i === index);
-    });
-
-    contents.forEach((c, i) => {
-        c.classList.toggle("active", i === index);
-    });
+    tabs.forEach((t, i) => t.classList.toggle("active", i === index));
+    contents.forEach((c, i) => c.classList.toggle("active", i === index));
 }
 
+/* ------------------- CSV 讀取並分類 ------------------- */
+const csvMap = {
+    "hitter": "skill_hitter.csv",
+    "pitcher": "skill_pitcher_starting.csv",
+    "bullpen": "skill_pitcher_relief.csv",
+    "hof": "D.csv"
+};
 
+function loadSkills(role) {
+    getSkillCsvFile(csvMap[role]).then(list => {
+        const tbodySS = document.getElementById(`${role}_ss`);
+        const tbodyS  = document.getElementById(`${role}_s`);
+        const tbodyA  = document.getElementById(`${role}_a`);
 
-/* -------------------------------------------------------
-   自動讀 CSV → 根據 grade (SS / S / A) 自動分類
--------------------------------------------------------- */
+        // 清空原本表格
+        [tbodySS, tbodyS, tbodyA].forEach(tbody => tbody.innerHTML = "");
 
-getSkillCsvFile('skill_hitter').then(hitterList => {
-    const tbodySS = document.querySelector("#hitter-SS tbody") || document.getElementById("hitter_ss");
-    const tbodyS  = document.querySelector("#hitter-S tbody")|| document.getElementById("hitter_s");
-    const tbodyA  = document.querySelector("#hitter-A tbody")|| document.getElementById("hitter_a");
+        list.forEach((item, idx) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${idx + 1}</td>
+                <td>${item.name}</td>
+                <td>${item.score}</td>
+                <td>${item.grade}</td>
+            `;
 
-    hitterList.forEach((hitter, index) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${hitter.name}</td>
-            <td>${hitter.score}</td>
-            <td>${hitter.grade}</td>
-        `;
+            switch (item.grade.trim().toUpperCase()) {
+                case "SS": tbodySS.appendChild(tr); break;
+                case "S":  tbodyS.appendChild(tr); break;
+                case "A":  tbodyA.appendChild(tr); break;
+                default: console.warn("未分類技能：", item); break;
+            }
+        });
+    }).catch(err => console.error(err));
+}
 
-        // 根據 CSV 第三欄 grade 自動分流
-        switch (hitter.grade.trim().toUpperCase()) {
-            case "SS":
-                tbodySS.appendChild(tr);
-                break;
-            case "S":
-                tbodyS.appendChild(tr);
-                break;
-            case "A":
-                tbodyA.appendChild(tr);
-                break;
-            default:
-                console.warn("未分類技能：", hitter);
-                break;
-        }
-    });
-});
-
-/* ------------------- CSV Reader --------------------- */
 function getSkillCsvFile(csvfile) {
-  return new Promise((resolve, reject) => {
-    $.get(`doc/${csvfile}.csv`, function(csvData) {
-      const lines = csvData.trim().split('\n');
-      lines.shift(); // 移除標題列
-
-      const skills = lines.map(line => {
-        const [name, score, grade, comment] = line.split(',');
-        return { name, score: parseFloat(score), grade, comment };
-      });
-
-      resolve(skills);
-    }).fail(() => reject('無法讀取 CSV 檔案'));
-  });
+    return new Promise((resolve, reject) => {
+        $.get(`doc/${csvfile}`, function(csvData) {
+            const lines = csvData.trim().split('\n');
+            lines.shift(); // 移除標題
+            const skills = lines.map(line => {
+                const [name, score, grade, comment] = line.split(',');
+                return { name, score: parseFloat(score), grade, comment };
+            });
+            resolve(skills);
+        }).fail(() => reject(`無法讀取 CSV 檔案: ${csvfile}`));
+    });
 }
 
+/* ------------------- 初始化，載入所有分頁 ------------------- */
+["hitter", "pitcher", "bullpen", "hof"].forEach(role => loadSkills(role));
 
 /* ------------------- 潛力計算 --------------------- */
 const levels = ["D", "D+", "C", "C+", "B", "B+", "A", "A+", "S", "S+"];
-
 const levelCost = {
     "D":  { "初階": 200, "中階": 0,   "高階": 0 },
     "D+": { "初階": 300, "中階": 450, "高階": 0 },
@@ -107,7 +96,6 @@ const levelCost = {
 function initSelect() {
     const current = document.getElementById("currentLevel");
     const max = document.getElementById("maxLevel");
-
     levels.forEach(lv => {
         current.innerHTML += `<option value="${lv}">${lv}</option>`;
         max.innerHTML += `<option value="${lv}">${lv}</option>`;
@@ -134,7 +122,6 @@ function calcCost() {
     }
 
     let low = 0, mid = 0, high = 0;
-
     for (let i = idxC + 1; i <= idxM; i++) {
         const lv = levels[i];
         low  += levelCost[lv]["初階"];
