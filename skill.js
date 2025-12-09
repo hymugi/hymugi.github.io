@@ -17,19 +17,21 @@ function showSubTab(index) {
 }
 
 /* ----------------- 修正後的 第三層分頁 ------------------ */
-function showSubSubTab(index, type) {
-    // 只找目前 active 子分頁內的 sub-sub-tabs
-    const currentSubContent = document.querySelector(".sub-content.active");
+function showSubSubTab(index) {
+    const current = document.querySelector(".sub-content.active");
 
-    const tabs = currentSubContent.querySelectorAll(".sub-sub-tab");
-    const contents = currentSubContent.querySelectorAll(".sub-sub-content");
+    const tabs = current.querySelectorAll(".sub-sub-tab");
+    const contents = current.querySelectorAll(".sub-sub-content");
 
-    tabs.forEach(t => t.classList.remove("active"));
-    contents.forEach(c => c.classList.remove("active"));
+    tabs.forEach((t, i) => {
+        t.classList.toggle("active", i === index);
+    });
 
-    tabs[index].classList.add("active");
-    contents[index].classList.add("active");
+    contents.forEach((c, i) => {
+        c.classList.toggle("active", i === index);
+    });
 }
+
 
 
 /* -------------------------------------------------------
