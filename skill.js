@@ -30,7 +30,6 @@ function showSubSubTab(index) {
     });
 }
 
-// CSV 讀取函數 (使用 fetch 而非 jQuery)
 async function loadSkillData(filename, prefix) {
     try {
         const response = await fetch(`doc/${filename}.csv`);
@@ -59,7 +58,6 @@ async function loadSkillData(filename, prefix) {
             }
         });
 
-        // 填充表格
         ['SS', 'S', 'A'].forEach(gradeLevel => {
             const tbody = document.getElementById(`${prefix}_${gradeLevel.toLowerCase()}`);
             if (tbody) {
