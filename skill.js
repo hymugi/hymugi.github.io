@@ -26,41 +26,19 @@ function showSubSubTab(index, type) {
 }
 
 getSkillCsvFile('skill_hitter').then(hitter => {
-  console.log(hitter); // ✅ 拿到轉換後的陣列
+    const tbody = document.getElementById("hitter");
+    hitter.forEach((hitter, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${hitter.name}</td>
+            <td>${hitter.score}</td>
+            <td>${hitter.grade}</td>
+        `;
+        tbody.appendChild(tr);
+    });
 });
 
-const hitter = [
-    { name: "核心主導者", score: 33, grade: "SS" },
-    { name: "領導者", score: 27, grade: "SS" },
-    { name: "中央打線", score: 24, grade: "SS" },
-    { name: "客場戰神", score: 22.8, grade: "SS" },
-    { name: "疊加", score: 24, grade: "SS" },
-    { name: "超速節奏", score: 23.2, grade: "SS" },
-    { name: "旋風主角", score: 22, grade: "S" },
-    { name: "打擊機器", score: 21, grade: "S" },
-    { name: "主場英雄", score: 20.9, grade: "S" },
-    { name: "挑戰精神", score: 20, grade: "S" },
-    { name: "挑戰者", score: 20, grade: "S" },
-    { name: "排名競爭", score: 19, grade: "A" },
-    { name: "五項全能", score: 15, grade: "A" },
-    { name: "強力打者", score: 18.7, grade: "A" },
-    { name: "下位打線", score: 18.5, grade: "A" },
-    { name: "經驗豐富", score: 18.4, grade: "A" },
-    { name: "主場優勢", score: 18.4, grade: "A" },
-    { name: "接觸型打者", score: 16.5, grade: "A" },
-    { name: "最佳球員", score: 16, grade: "A" },
-];
-const tbody = document.getElementById("hitter");
-hitter.forEach((hitter, index) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-        <td>${index + 1}</td>
-        <td>${hitter.name}</td>
-        <td>${hitter.score}</td>
-        <td>${hitter.grade}</td>
-    `;
-    tbody.appendChild(tr);
-});
 const levels = ["D", "D+", "C", "C+", "B", "B+", "A", "A+", "S", "S+"];
 
 const levelCost = {
