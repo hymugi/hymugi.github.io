@@ -206,7 +206,6 @@
 
     <div class="content" style="width: auto;">
         <h2 style="text-align:center;">技能大集合</h2>
-        <!-- 子分頁 -->
         <div class="sub-tabs">
             <div class="sub-tab active" onclick="showSubTab(0)">打者</div>
             <div class="sub-tab" onclick="showSubTab(1)">投手</div>
@@ -214,7 +213,6 @@
             <div class="sub-tab" onclick="showSubTab(3)">HOF</div>
         </div>
         <div class="sub-content active">
-            <!-- 二級分頁 -->
             <div class="sub-sub-tabs">
                 <div class="sub-sub-tab active" onclick="showSubSubTab(0, 'hitter')">SS</div>
                 <div class="sub-sub-tab" onclick="showSubSubTab(1, 'hitter')">S</div>
@@ -241,11 +239,8 @@
                     <tr><td>1</td><td>速度型選手</td><td>20</td></tr>
                 </table>
             </div>
-        
-       
         </div>
          <div class="sub-content">
-            <!-- 二級分頁 -->
             <div class="sub-sub-tabs">
                 <div class="sub-sub-tab active" onclick="showSubSubTab(0, 'hitter')">SS</div>
                 <div class="sub-sub-tab" onclick="showSubSubTab(1, 'hitter')">S</div>
@@ -270,12 +265,8 @@
                     <tr><td>1</td><td>速度型選手</td><td>20</td></tr>
                 </table>
             </div>
-        
-       
         </div>
-        
     </div>
-
 <script>
 function showTab(index) {
     document.querySelectorAll(".tab").forEach((t,i)=>{
@@ -324,11 +315,7 @@ const hitter = [
     { name: "接觸型打者", score: 16.5, grade: "A" },
     { name: "最佳球員", score: 16, grade: "A" },
 ];
-
-// 取得 tbody
 const tbody = document.getElementById("hitter");
-
-// 生成表格列
 hitter.forEach((hitter, index) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
@@ -354,7 +341,6 @@ const levelCost = {
     "S+": {"初階": 0,    "中階": 1250,"高階": 1400},
 };
 
-// 動態塞入下拉框
 function initSelect() {
     const current = document.getElementById("currentLevel");
     const max = document.getElementById("maxLevel");
@@ -366,7 +352,6 @@ function initSelect() {
 }
 initSelect();
 
-// 計算素材
 function calcCost() {
     const c = document.getElementById("currentLevel").value;
     const m = document.getElementById("maxLevel").value;
