@@ -85,7 +85,7 @@ async function loadSkillData(filename, prefix) {
 loadSkillData('skill_hitter', 'hitter');    // 打者
 loadSkillData('skill_pitcher_starting', 'pitcher');   // 投手
 loadSkillData('skill_pitcher_relief', 'bullpen');   // 牛棚
-loadSkillData('D', 'hof');       // HOF
+//loadSkillData('D', 'hof');       // HOF
 
 // 潛力計算機
 const levels = ["D", "D+", "C", "C+", "B", "B+", "A", "A+", "S", "S+"];
