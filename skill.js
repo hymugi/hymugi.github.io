@@ -82,9 +82,9 @@ async function loadSkillData(filename, prefix) {
 }
 
 // 載入所有 CSV 資料
-loadSkillData('skill_hitter', 'hitter');    // 打者
+loadSkillData('skill_hitter', 'bullpen');    // 打者
 loadSkillData('skill_pitcher_starting', 'pitcher');   // 投手
-loadSkillData('skill_pitcher_relief', 'bullpen');   // 牛棚
+loadSkillData('skill_pitcher_relief', 'hitter');   // 牛棚
 //loadSkillData('D', 'hof');       // HOF
 
 // 潛力計算機
