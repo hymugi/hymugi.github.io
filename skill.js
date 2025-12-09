@@ -6,6 +6,7 @@ function showTab(index) {
         c.classList.toggle("active", i === index);
     });
 }
+
 function showSubTab(index) {
     document.querySelectorAll(".sub-tab").forEach((t, i) => {
         t.classList.toggle("active", i === index);
@@ -14,20 +15,33 @@ function showSubTab(index) {
         c.classList.toggle("active", i === index);
     });
 }
+
+/* ----------------- 修正後的 第三層分頁 ------------------ */
 function showSubSubTab(index, type) {
-    const contents = document.querySelectorAll(`#${type}-SS, #${type}-S, #${type}-A`);
-    const tabs = document.querySelectorAll(`.sub-sub-tabs div`);
+    // 只找目前 active 子分頁內的 sub-sub-tabs
+    const currentSubContent = document.querySelector(".sub-content.active");
 
-    contents.forEach(c => c.classList.remove('active'));
-    tabs.forEach(t => t.classList.remove('active'));
+    const tabs = currentSubContent.querySelectorAll(".sub-sub-tab");
+    const contents = currentSubContent.querySelectorAll(".sub-sub-content");
 
-    contents[index].classList.add('active');
-    tabs[index].classList.add('active');
+    tabs.forEach(t => t.classList.remove("active"));
+    contents.forEach(c => c.classList.remove("active"));
+
+    tabs[index].classList.add("active");
+    contents[index].classList.add("active");
 }
 
-getSkillCsvFile('skill_hitter').then(hitter => {
-    const tbody = document.getElementById("hitter");
-    hitter.forEach((hitter, index) => {
+
+/* -------------------------------------------------------
+   自動讀 CSV → 根據 grade (SS / S / A) 自動分類
+-------------------------------------------------------- */
+
+getSkillCsvFile('skill_hitter').then(hitterList => {
+    const tbodySS = document.querySelector("#hitter-SS tbody") || document.getElementById("hitter");
+    const tbodyS  = document.querySelector("#hitter-S tbody");
+    const tbodyA  = document.querySelector("#hitter-A tbody");
+
+    hitterList.forEach((hitter, index) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
             <td>${index + 1}</td>
@@ -35,23 +49,57 @@ getSkillCsvFile('skill_hitter').then(hitter => {
             <td>${hitter.score}</td>
             <td>${hitter.grade}</td>
         `;
-        tbody.appendChild(tr);
+
+        // 根據 CSV 第三欄 grade 自動分流
+        switch (hitter.grade.trim().toUpperCase()) {
+            case "SS":
+                tbodySS.appendChild(tr);
+                break;
+            case "S":
+                tbodyS.appendChild(tr);
+                break;
+            case "A":
+                tbodyA.appendChild(tr);
+                break;
+            default:
+                console.warn("未分類技能：", hitter);
+                break;
+        }
     });
 });
 
+/* ------------------- CSV Reader --------------------- */
+function getSkillCsvFile(csvfile) {
+  return new Promise((resolve, reject) => {
+    $.get(`doc/${csvfile}.csv`, function(csvData) {
+      const lines = csvData.trim().split('\n');
+      lines.shift(); // 移除標題列
+
+      const skills = lines.map(line => {
+        const [name, score, grade, comment] = line.split(',');
+        return { name, score: parseFloat(score), grade, comment };
+      });
+
+      resolve(skills);
+    }).fail(() => reject('無法讀取 CSV 檔案'));
+  });
+}
+
+
+/* ------------------- 潛力計算 --------------------- */
 const levels = ["D", "D+", "C", "C+", "B", "B+", "A", "A+", "S", "S+"];
 
 const levelCost = {
-    "D": { "初階": 200, "中階": 0, "高階": 0 },
+    "D":  { "初階": 200, "中階": 0,   "高階": 0 },
     "D+": { "初階": 300, "中階": 450, "高階": 0 },
-    "C": { "初階": 400, "中階": 550, "高階": 0 },
+    "C":  { "初階": 400, "中階": 550, "高階": 0 },
     "C+": { "初階": 500, "中階": 650, "高階": 0 },
-    "B": { "初階": 0, "中階": 750, "高階": 900 },
-    "B+": { "初階": 0, "中階": 850, "高階": 1000 },
-    "A": { "初階": 0, "中階": 950, "高階": 1100 },
-    "A+": { "初階": 0, "中階": 1050, "高階": 1200 },
-    "S": { "初階": 0, "中階": 1150, "高階": 1300 },
-    "S+": { "初階": 0, "中階": 1250, "高階": 1400 },
+    "B":  { "初階": 0,   "中階": 750, "高階": 900 },
+    "B+": { "初階": 0,   "中階": 850, "高階": 1000 },
+    "A":  { "初階": 0,   "中階": 950, "高階": 1100 },
+    "A+": { "初階": 0,   "中階": 1050,"高階": 1200 },
+    "S":  { "初階": 0,   "中階": 1150,"高階": 1300 },
+    "S+": { "初階": 0,   "中階": 1250,"高階": 1400 }
 };
 
 function initSelect() {
@@ -87,8 +135,8 @@ function calcCost() {
 
     for (let i = idxC + 1; i <= idxM; i++) {
         const lv = levels[i];
-        low += levelCost[lv]["初階"];
-        mid += levelCost[lv]["中階"];
+        low  += levelCost[lv]["初階"];
+        mid  += levelCost[lv]["中階"];
         high += levelCost[lv]["高階"];
     }
 
@@ -97,20 +145,4 @@ function calcCost() {
         中階素材需要：<b>${mid}</b><br>
         高階素材需要：<b>${high}</b>
     `;
-}
-
-function getSkillCsvFile(csvfile) {
-  return new Promise((resolve, reject) => {
-    $.get(`doc/${csvfile}.csv`, function(csvData) {
-      const lines = csvData.trim().split('\n');
-      lines.shift();
-
-      const hitter = lines.map(line => {
-        const [name, score, grade, comment] = line.split(',');
-        return { name, score: parseFloat(score), grade, comment };
-      });
-
-      resolve(hitter);
-    }).fail(() => reject('無法讀取 CSV 檔案'));
-  });
 }
