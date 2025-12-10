@@ -49,7 +49,7 @@ function renderLevelTabs() {
 
 
 function loadCSVData(csvfile) {
-    return $.get(`data/${csvfile}.csv`).then(csvData => {
+    return $.get(`doc/${csvfile}.csv`).then(csvData => {
         const lines = csvData.trim().split('\n');
         lines.shift();
 
