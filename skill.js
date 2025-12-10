@@ -191,7 +191,7 @@ function calcCost() {
 
     let low = 0, mid = 0, high = 0;
 
-    for (let i = idxC + 1; i <= idxM; i++) {
+    for (let i = idxC; i <= idxM; i++) {
         const lv = levels[i];
         low  += levelCost[lv]["初階"];
         mid  += levelCost[lv]["中階"];
