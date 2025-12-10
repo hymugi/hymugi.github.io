@@ -1,3 +1,6 @@
+var nowSkills = []
+var nowSkillsLevel = []
+
 function showTab(index) {
     document.querySelectorAll(".tab").forEach((t, i) => {
         t.classList.toggle("active", i === index);
@@ -7,7 +10,7 @@ function showTab(index) {
     });
 }
 
-function showSubTab(index) {
+function showSubTab(self,csvfile) {
     document.querySelectorAll(".sub-tab").forEach((t, i) => {
         t.classList.toggle("active", i === index);
     });
@@ -16,17 +19,73 @@ function showSubTab(index) {
     });
 }
 
-function showSubSubTab(index) {
-    const current = document.querySelector(".sub-content.active");
-    const tabs = current.querySelectorAll(".sub-sub-tab");
-    const contents = current.querySelectorAll(".sub-sub-content");
+function selectSkillTab(self,csvfile) {
+    $(".sub-tab").removeClass("active");
+    $(self).addClass("active");
+    nowSkills = [];
+    nowSkillsLevel = [];
 
-    tabs.forEach((t, i) => {
-        t.classList.toggle("active", i === index);
+    loadCSVData(csvfile).then(() => {
+        renderLevelTabs()
     });
+}
 
-    contents.forEach((c, i) => {
-        c.classList.toggle("active", i === index);
+function renderLevelTabs() {
+  const $container = $("#levels");
+  $container.empty(); // 清空原本內容
+
+  nowSkillsLevel.forEach((level, index) => {
+    const $tab = $("<div>")
+    .addClass("sub-sub-tab")
+    .text(level)
+    .attr("data-index", index)
+    .on("click", function() {
+        filterSkills(this, level);
+    });
+    $container.append($tab);
+  });
+  $(".sub-sub-tab").first().trigger("click");
+}
+
+
+function loadCSVData(csvfile) {
+    return $.get(`data/${csvfile}.csv`).then(csvData => {
+        const lines = csvData.trim().split('\n');
+        lines.shift();
+
+        const skills = lines.map(line => {
+            const [name, score, grade, comment] = line.split(',');
+            return { name, score: parseFloat(score), grade, comment };
+        });
+
+        nowSkills = skills.map(s => ({
+            name: s.name,
+            score: s.score,
+            grade: s.grade
+        }));
+
+        nowSkillsLevel = [...new Set(skills.map(s => s.grade))];
+    });
+}
+
+function filterSkills(self,skill) {
+    $(".sub-sub-tab").removeClass("active");
+    $(self).addClass("active");
+    // 1️⃣ 篩出符合等級的技能
+    const filtered = nowSkills.filter(s => s.grade === skill);
+
+    // 2️⃣ 清空舊資料
+    const $tbody = $("#skills");
+    $tbody.empty();
+
+    // 3️⃣ 動態加入新列
+    filtered.forEach((item, index) => {
+        const $row = $("<tr>");
+        $row.append($("<td>").text(index + 1));     // 序號
+        $row.append($("<td>").text(item.name));     // 技能
+        $row.append($("<td>").text(item.score));    // 評分
+        $row.append($("<td>").text(item.grade));    // 等級
+        $tbody.append($row);
     });
 }
 
@@ -80,9 +139,9 @@ async function loadSkillData(filename, prefix) {
 }
 
 // 載入所有 CSV 資料
-loadSkillData('skill_hitter', 'hitter');    // 打者
+/*loadSkillData('skill_hitter', 'hitter');    // 打者
 loadSkillData('skill_pitcher_starting', 'pitcher');   // 投手
-loadSkillData('skill_pitcher_relief', 'bullpen');   // 牛棚
+loadSkillData('skill_pitcher_relief', 'bullpen');   // 牛棚*/
 //loadSkillData('D', 'hof');       // HOF
 
 // 潛力計算機

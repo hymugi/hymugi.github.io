@@ -33,34 +33,18 @@
        <div class="content" style="width:auto;">
             <h2 style="text-align:center;">技能大集合</h2>
             <div class="sub-tabs">
-                <div class="sub-tab active" onclick="showSubTab(0)">打者</div>
-                <div class="sub-tab" onclick="showSubTab(1)">投手</div>
-                <div class="sub-tab" onclick="showSubTab(2)">牛棚</div>
-                <div class="sub-tab" onclick="showSubTab(3)">HOF</div>
+                <div class="sub-tab active" onclick="selectSkillTab(this,'skill_hitter')">打者</div>
+                <div class="sub-tab" onclick="selectSkillTab(this,'skill_pitcher_starting')">先發</div>
+                <div class="sub-tab" onclick="selectSkillTab(this,'skill_pitcher_relief')">牛棚</div>
+                <div class="sub-tab" onclick="selectSkillTab(this,'skill_hof_hitter')">HOF投手</div>
+                <div class="sub-tab" onclick="selectSkillTab(this,'skill_hof_pitcher')">HOF打者</div>
             </div>
 
             <!-- 打者 -->
             <div class="sub-content active">
-                <div class="sub-sub-tabs">
+                <div class="sub-sub-tabs" id="levels">
                     <div class="sub-sub-tab active" onclick="showSubSubTab(0)">SS</div>
-                    <div class="sub-sub-tab" onclick="showSubSubTab(1)">S</div>
-                    <div class="sub-sub-tab" onclick="showSubSubTab(2)">A</div>
                 </div>
-
-                <div class="sub-sub-content active">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>序號</th>
-                                <th>技能</th>
-                                <th>評分</th>
-                                <th>等級</th>
-                            </tr>
-                        </thead>
-                        <tbody id="hitter_ss"></tbody>
-                    </table>
-                </div>
-
                 <div class="sub-sub-content">
                     <table>
                         <thead>
@@ -71,180 +55,14 @@
                                 <th>等級</th>
                             </tr>
                         </thead>
-                        <tbody id="hitter_s"></tbody>
-                    </table>
-                </div>
-
-                <div class="sub-sub-content">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>序號</th>
-                                <th>技能</th>
-                                <th>評分</th>
-                                <th>等級</th>
-                            </tr>
-                        </thead>
-                        <tbody id="hitter_a"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- 投手 -->
-            <div class="sub-content">
-                <div class="sub-sub-tabs">
-                    <div class="sub-sub-tab active" onclick="showSubSubTab(0)">SS</div>
-                    <div class="sub-sub-tab" onclick="showSubSubTab(1)">S</div>
-                    <div class="sub-sub-tab" onclick="showSubSubTab(2)">A</div>
-                </div>
-
-                <div class="sub-sub-content active">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>序號</th>
-                                <th>技能</th>
-                                <th>評分</th>
-                                <th>等級</th>
-                            </tr>
-                        </thead>
-                        <tbody id="pitcher_ss"></tbody>
-                    </table>
-                </div>
-
-                <div class="sub-sub-content">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>序號</th>
-                                <th>技能</th>
-                                <th>評分</th>
-                                <th>等級</th>
-                            </tr>
-                        </thead>
-                        <tbody id="pitcher_s"></tbody>
-                    </table>
-                </div>
-
-                <div class="sub-sub-content">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>序號</th>
-                                <th>技能</th>
-                                <th>評分</th>
-                                <th>等級</th>
-                            </tr>
-                        </thead>
-                        <tbody id="pitcher_a"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- 牛棚 -->
-            <div class="sub-content">
-                <div class="sub-sub-tabs">
-                    <div class="sub-sub-tab active" onclick="showSubSubTab(0)">SS</div>
-                    <div class="sub-sub-tab" onclick="showSubSubTab(1)">S</div>
-                    <div class="sub-sub-tab" onclick="showSubSubTab(2)">A</div>
-                </div>
-
-                <div class="sub-sub-content active">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>序號</th>
-                                <th>技能</th>
-                                <th>評分</th>
-                                <th>等級</th>
-                            </tr>
-                        </thead>
-                        <tbody id="bullpen_ss"></tbody>
-                    </table>
-                </div>
-
-                <div class="sub-sub-content">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>序號</th>
-                                <th>技能</th>
-                                <th>評分</th>
-                                <th>等級</th>
-                            </tr>
-                        </thead>
-                        <tbody id="bullpen_s"></tbody>
-                    </table>
-                </div>
-
-                <div class="sub-sub-content">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>序號</th>
-                                <th>技能</th>
-                                <th>評分</th>
-                                <th>等級</th>
-                            </tr>
-                        </thead>
-                        <tbody id="bullpen_a"></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- HOF -->
-            <div class="sub-content">
-                <div class="sub-sub-tabs">
-                    <div class="sub-sub-tab active" onclick="showSubSubTab(0)">SS</div>
-                    <div class="sub-sub-tab" onclick="showSubSubTab(1)">S</div>
-                    <div class="sub-sub-tab" onclick="showSubSubTab(2)">A</div>
-                </div>
-
-                <div class="sub-sub-content active">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>序號</th>
-                                <th>技能</th>
-                                <th>評分</th>
-                                <th>等級</th>
-                            </tr>
-                        </thead>
-                        <tbody id="hof_ss"></tbody>
-                    </table>
-                </div>
-
-                <div class="sub-sub-content">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>序號</th>
-                                <th>技能</th>
-                                <th>評分</th>
-                                <th>等級</th>
-                            </tr>
-                        </thead>
-                        <tbody id="hof_s"></tbody>
-                    </table>
-                </div>
-
-                <div class="sub-sub-content">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>序號</th>
-                                <th>技能</th>
-                                <th>評分</th>
-                                <th>等級</th>
-                            </tr>
-                        </thead>
-                        <tbody id="hof_a"></tbody>
+                        <tbody id="skills"></tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.3/jquery.csv.min.js"></script>
     <script src="skill.js"></script>
 </body>
 </html>
