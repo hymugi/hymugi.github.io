@@ -6,7 +6,7 @@ body {
     }
 
     .container {
-        max-width: 420px;
+        max-width: 70%;
         margin: auto;
     }
 
@@ -150,6 +150,7 @@ body {
     }
     .sub-sub-tabs {
     display: flex;
+    justify-content: center;
     margin-top: 10px;
     }
     .sub-sub-tab {
