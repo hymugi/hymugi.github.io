@@ -10,6 +10,12 @@ body {
         margin: auto;
     }
 
+    @media (max-width: 768px) {
+        .container {
+            max-width: 95%;   /* 放寬 */
+        }
+    }
+
     h2 {
         text-align: center;
         margin-bottom: 15px;
