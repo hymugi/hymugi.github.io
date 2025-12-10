@@ -8,6 +8,10 @@ function showTab(index) {
     document.querySelectorAll(".content").forEach((c, i) => {
         c.classList.toggle("active", i === index);
     });
+
+    if (index == 1) {
+        $(".sub-tab").first().trigger("click");
+    }
 }
 
 function showSubTab(self,csvfile) {
@@ -33,6 +37,15 @@ function selectSkillTab(self,csvfile) {
 function renderLevelTabs() {
   const $container = $("#levels");
   $container.empty(); // 清空原本內容
+
+  const $tab = $("<div>")
+    .addClass("sub-sub-tab")
+    .text('All')
+    .attr("data-index", -1)
+    .on("click", function() {
+        filterSkills(this, 'All');
+    });
+    $container.append($tab);
 
   nowSkillsLevel.forEach((level, index) => {
     const $tab = $("<div>")
@@ -71,25 +84,33 @@ function loadCSVData(csvfile) {
 function filterSkills(self,skill) {
     $(".sub-sub-tab").removeClass("active");
     $(self).addClass("active");
-    // 1️⃣ 篩出符合等級的技能
-    const filtered = nowSkills.filter(s => s.grade === skill);
-
-    // 2️⃣ 清空舊資料
     const $tbody = $("#skills");
     $tbody.empty();
-
-    // 3️⃣ 動態加入新列
-    filtered.forEach((item, index) => {
-        const $row = $("<tr>");
-        $row.append($("<td>").text(index + 1));     // 序號
-        $row.append($("<td>").text(item.name));     // 技能
-        $row.append($("<td>").text(item.score));    // 評分
-        $row.append($("<td>").text(item.grade));    // 等級
-        $tbody.append($row);
-    });
+    // 1️⃣ 篩出符合等級的技能
+    if (skill == 'All') {
+        nowSkills.forEach((item, index) => {
+            const $row = $("<tr>");
+            $row.append($("<td>").text(index + 1));     // 序號
+            $row.append($("<td>").text(item.name));     // 技能
+            $row.append($("<td>").text(item.score));    // 評分
+            $row.append($("<td>").text(item.grade));    // 等級
+            $tbody.append($row);
+        });
+    } else {
+        const filtered = nowSkills.filter(s => s.grade === skill);
+        filtered.forEach((item, index) => {
+            const $row = $("<tr>");
+            $row.append($("<td>").text(index + 1));     // 序號
+            $row.append($("<td>").text(item.name));     // 技能
+            $row.append($("<td>").text(item.score));    // 評分
+            $row.append($("<td>").text(item.grade));    // 等級
+            $tbody.append($row);
+        });
+    }
+    
 }
 
-async function loadSkillData(filename, prefix) {
+/*async function loadSkillData(filename, prefix) {
     try {
         const response = await fetch(`doc/${filename}.csv`);
         const csvData = await response.text();
@@ -136,7 +157,7 @@ async function loadSkillData(filename, prefix) {
     } catch (error) {
         console.error(`無法讀取 ${filename}.csv:`, error);
     }
-}
+}*/
 
 // 載入所有 CSV 資料
 /*loadSkillData('skill_hitter', 'hitter');    // 打者
