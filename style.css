@@ -155,9 +155,11 @@ body {
         display: block;
     }
     .sub-sub-tabs {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;       /* ⬅️ 超過寬度自動換行 */
+        justify-content: center; /* ⬅️ 水平置中 */
+        gap: 6px;              /* ⬅️ tab 間距（可選） */
+        margin-top: 10px;
     }
     .sub-sub-tab {
         padding: 5px 10px;
